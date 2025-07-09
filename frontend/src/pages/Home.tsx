@@ -13,7 +13,7 @@ export default function Home() {
                 </h3>
             </div>
 
-            <NavLink to={'/dashboard'}
+            <NavLink to={'/todos'}
                 className="text-lg font-semibold text-blue-600 rounded bg-gray-100 hover:bg-gray-50 hover:scale-102 px-10 py-5 m-8"
             >
                 Get Started

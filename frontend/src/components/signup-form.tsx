@@ -19,7 +19,7 @@ interface LoginFormProps extends React.ComponentProps<"div"> {
 import React, { useState } from "react";
 import { NavLink } from "react-router"
 
-export function LoginForm({
+export function SignupForm({
   onFormSubmit,
   className,
   ...props
@@ -31,14 +31,23 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Create New account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your details to create new account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={onFormSubmit}>
             <div className="flex flex-col gap-6">
+              <div className="grid gap-3">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  placeholder="Your Full Name"
+                  required
+                />
+              </div>
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -84,9 +93,9 @@ export function LoginForm({
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <NavLink to={'/signup'} className="underline underline-offset-4">
-                Sign up
+              Already have an account?{" "}
+              <NavLink to={'/login'} className="underline underline-offset-4">
+                login
               </NavLink>
             </div>
           </form>
