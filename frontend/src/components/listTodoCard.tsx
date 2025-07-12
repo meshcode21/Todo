@@ -1,5 +1,5 @@
+
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { Card, CardContent } from "./ui/card";
 import {
   Table,
   TableBody,
@@ -9,8 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Button } from "./ui/button";
+import { BookmarkCheck, SquarePen, Trash } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "@/app/store";
+import { removeTodo } from "@/features/todos/todosSlice";
 
 export default function ListTodoCard() {
+  const todos = useSelector((state: RootState) => state.todos)
+  const dispatch = useDispatch();
   return (
     <ScrollArea className="overflow-auto h-full rounded-md border p-4 w-full max-w-2xl m-auto shadow-md">
       <Table>
@@ -23,21 +30,37 @@ export default function ListTodoCard() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
+          {
+            todos.map((todo, index) => (
+              <TableRow key={todo.id} className="shadow">
+                <TableCell className="font-medium">{index + 1}.</TableCell>
+                <TableCell>{todo.text}</TableCell>
+                <TableCell className="text-right">
+                  <div className="float-end flex gap-1">
+                    <Button className="size-7" variant={'secondary'} size={'icon'}> <BookmarkCheck /> </Button>
+                    <Button className="size-7" size={'icon'}> <SquarePen /> </Button>
+                    <Button className="size-7" variant={'destructive'} size={'icon'}
+                      onClick={() => {
+                        // alert(todo.id)
+                        dispatch(removeTodo({ id: todo.id }))
+                      }}
+                    > <Trash /> </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          }
+          {/* <TableRow className="shadow">
             <TableCell className="font-medium">1.</TableCell>
             <TableCell>Paid</TableCell>
-            <TableCell className="text-right">$250.00</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">1.</TableCell>
-            <TableCell>Paid</TableCell>
-            <TableCell className="text-right">$250.00</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-medium">1.</TableCell>
-            <TableCell>Paid</TableCell>
-            <TableCell className="text-right">$250.00</TableCell>
-          </TableRow>
+            <TableCell className="text-right">
+              <div className="float-end flex gap-1">
+                <Button className="size-7" variant={'secondary'} size={'icon'}> <BookmarkCheck /> </Button>
+                <Button className="size-7" size={'icon'}> <SquarePen /> </Button>
+                <Button className="size-7" variant={'destructive'} size={'icon'}> <Trash /> </Button>
+              </div>
+            </TableCell>
+          </TableRow> */}
         </TableBody>
       </Table>
     </ScrollArea>

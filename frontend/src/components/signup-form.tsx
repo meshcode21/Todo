@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, LoaderCircle } from "lucide-react"
 import { Toggle } from "@/components/ui/toggle"
 
 interface LoginFormProps extends React.ComponentProps<"div"> {
   onFormSubmit: React.FormEventHandler<HTMLFormElement>;
+  loading: Boolean;
 }
 
 import React, { useState } from "react";
@@ -21,6 +22,7 @@ import { NavLink } from "react-router"
 
 export function SignupForm({
   onFormSubmit,
+  loading,
   className,
   ...props
 }: LoginFormProps) {
@@ -85,11 +87,10 @@ export function SignupForm({
               </div>
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full">
-                  Login
+                  Sign Up
+                  {loading ? <LoaderCircle className="animate-spin"/> : ''}
                 </Button>
-                {/* <Button variant="outline" className="w-full">
-                  Login with Google
-                </Button> */}
+
               </div>
             </div>
             <div className="mt-4 text-center text-sm">

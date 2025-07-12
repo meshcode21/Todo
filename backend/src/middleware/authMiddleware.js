@@ -2,9 +2,10 @@ import jwt, { decode } from 'jsonwebtoken'
 import db from '../config/db.js'
 
 export const protect = async (req, res, next) => {
+    // console.log("Hello mahesh, i am here:\n",req.headers)
     let token = req.headers.authorization?.split(' ')[1]
 
-    if (!token) return res.status(401).json({ message: 'Not authorized, no token' })
+    if (!token) return res.status(401).json({ error: 'Not authorized, no token' })
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -18,6 +19,6 @@ export const protect = async (req, res, next) => {
         return next()
     } catch (err) {
         console.error(err);
-        res.status(401).json({ message: 'Invalid token' })
+        res.status(401).json({ error: 'Invalid token' })
     }
 }

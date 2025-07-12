@@ -15,7 +15,7 @@ export const login = (req, res) => {
             const user = { id: results[0][0].id, name: results[0][0].name };
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-            res.status(200).json({ message: "Login successful", user, token });
+            res.status(200).json({ message: "Login successful", token });
         })
         .catch(err => {
             console.error("Error querying database:", err);
@@ -25,11 +25,16 @@ export const login = (req, res) => {
 
 export const signup = (req, res) => {
     const { name, email, password } = req.body;
+    console.log("i am here ", req.body)
 
     const query = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
     db.query(query, [name, email, password])
-        .then(() => {
-            res.status(201).json({ message: "User created successfully" });
+        .then((result) => {
+            // console.log("i am here", result);
+            const userId = result[0].insertId;
+            const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+            res.status(201).json({ message: "User created successfully", token });
         })
         .catch(err => {
             if (err.code === 'ER_DUP_ENTRY') {
