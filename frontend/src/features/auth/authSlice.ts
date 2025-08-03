@@ -11,6 +11,8 @@ export const loginUser = createAsyncThunk(
     try {
       const res = await axios.post('/auth/login', credentials);
       localStorage.setItem("token", res.data.token);
+      // console.log("user data type: "+typeof(JSON.stringify(res.data.user)));
+      localStorage.setItem("user", JSON.stringify(res.data.user)); // Store user info if needed
       return res.data;
     }
     catch (err: any) {
@@ -25,6 +27,7 @@ export const signupUser = createAsyncThunk(
     try {
       const res = await axios.post('auth/signup', data);
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user)); // Store user info if needed
       return res.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue(err.response?.data?.error || "Signup Failed");
@@ -34,6 +37,7 @@ export const signupUser = createAsyncThunk(
 
 interface AuthState {
   token: string | null
+  user: { id: number; name: string; } | null
   loading: boolean
   message: string | null
   error: string | null
@@ -41,6 +45,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   token: localStorage.getItem('token'),
+  user: JSON.parse(localStorage.getItem('user')!) || null,
   loading: false,
   message: null,
   error: null
@@ -52,6 +57,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.token = null;
+      state.user = null;
       localStorage.removeItem("token");
     }
   },
@@ -66,6 +72,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
+        state.user = action.payload.user;
         state.message = action.payload.message;
         state.error = null;
       })
@@ -83,6 +90,7 @@ const authSlice = createSlice({
       .addCase(signupUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
+        state.user = action.payload.user;
         state.message = action.payload.message;
         state.error = null;
       })

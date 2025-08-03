@@ -1,6 +1,7 @@
 import { LoginForm } from "@/components/login-form";
 import { loginUser } from "@/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -20,13 +21,15 @@ export default function Login() {
         dispatch(loginUser({ email, password }));
     }
 
-    if (message && token) {
-        toast.success(message);
-        navigate('/todos');
-    }
-    if (error) {
-        toast.error(error);
-    }
+    useEffect(() => {
+        if (message && token) {
+            toast.success(message);
+            navigate('/todos');
+        }
+        if (error) {
+            toast.error(error);
+        }
+    }, [message, token, error, navigate]);
 
     return (
         <div className="container m-auto p-6 h-full flex">

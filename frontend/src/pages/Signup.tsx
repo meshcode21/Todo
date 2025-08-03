@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { useNavigate } from "react-router";
 import { signupUser } from "@/features/auth/authSlice";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 export default function Signup() {
     const dispatch = useAppDispatch();
@@ -20,13 +21,15 @@ export default function Signup() {
         dispatch(signupUser({ name, email, password }));
     }
 
-    if (message && token) {
-        toast.success(message);
-        navigate('/todos');
-    }
-    if (error) {
-        toast.error(error);
-    }
+    useEffect(() => {
+        if (message && token) {
+            toast.success(message);
+            navigate('/todos');
+        }
+        if (error) {
+            toast.error(error);
+        }
+    }, [message, token, error, navigate]);
 
     return (
         <div className="container m-auto p-6 h-full flex">

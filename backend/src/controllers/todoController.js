@@ -2,6 +2,7 @@ import db from "../config/db.js";
 
 // fetch todos by user's id
 export const getTodos = (req, res) => {
+  // console.log("user request \n",req)
   const query = 'SELECT * FROM todos WHERE user_id = ?';
   db.query(query, [req.user.id])
     .then(results => {

@@ -1,3 +1,4 @@
+import { postTodo } from "@/api/myAPI";
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -7,13 +8,24 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { addTodo } from "@/features/todos/todosSlice";
-import { nanoid } from "@reduxjs/toolkit";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react"
 import { useDispatch } from "react-redux";
 
 export function AddTodoCard() {
+    // const dispatch = useDispatch();
     const [todoText, setTodoText] = useState<string>("");
-    const dispatch = useDispatch();
+
+    const queryClient = useQueryClient();
+
+    // Mutation 
+    const mutation = useMutation({
+        mutationFn: postTodo,
+        onSuccess: () => {
+            // Invalidate and refetch
+            queryClient.invalidateQueries({ queryKey: ['todos'] })
+        }
+    })
 
     return (
         <Card className="w-full max-w-2xl m-auto border">
@@ -25,15 +37,21 @@ export function AddTodoCard() {
                     <Input
                         placeholder="Anything you want to do"
                         value={todoText}
-                        // onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                            
-                        // }}
+                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                            if (e.key === 'Enter' && todoText.trim() !== "") {
+                                document.getElementById("add-todo-button")?.click();
+                            }
+                        }}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodoText(e.target.value)}
                     />
                     <Button
+                        id="add-todo-button"
                         onClick={() => {
-                            dispatch(addTodo({ text: todoText }));
-                            setTodoText("");
+                            if (todoText.trim() !== "") {
+                                // dispatch(addTodo({ text: todoText }));
+                                mutation.mutate(todoText)
+                                setTodoText("");
+                            }
                         }}
                     >
                         Add Todo

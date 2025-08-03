@@ -7,11 +7,7 @@ export interface Todo {
     completed: boolean;
 }
 
-const initialState: Todo[] = [{
-    id: Date.now(),
-    text: "mahesh",
-    completed: false
-}];
+const initialState: Todo[] = [];
 
 const todosSlice = createSlice({
     name: "todos",
@@ -25,7 +21,7 @@ const todosSlice = createSlice({
             })
         },
         removeTodo: (state, action: PayloadAction<{ id: number }>) => {
-            return state.filter(todo => todo.id !== action.payload.id);            
+            return state.filter(todo => todo.id !== action.payload.id);
         },
         toggleTodo: (state, action: PayloadAction<{ id: number }>) => {
             const todo = state.find(todo => todo.id === action.payload.id)

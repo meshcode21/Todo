@@ -1,38 +1,37 @@
 import { AddTodoCard } from "@/components/addTodoCard"
 import ListTodoCard from "@/components/listTodoCard"
 import axios from "@/api/axios"
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useAppSelector } from "@/hooks/reduxHooks";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getTodos, postTodo } from "@/api/myAPI";
 
 
 export default function Todos() {
 
-    const navigate = useNavigate();
+    const { user } = useAppSelector((state) => state.auth);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const res = await axios.get('/todos',{
-                    headers:{
-                        authorization: "Bearer " + localStorage.getItem("token")
-                    }
-                });
-                console.log(res);
-            } catch (err: any) {
-                console.error(err);
-                if (err.status == 401)
-                    navigate('/login');
-            }
-        })();
+
+    // queries
+    const { data, error, isLoading, isError } = useQuery({
+        queryKey: ['todos'],
+        queryFn: getTodos,
     })
 
-
+    //Loading while processing or fetching data...
+    if (isLoading) return <div className="text-center">Loading...</div>
+    if (isError) {
+        console.log("This is the error while loading todos: \n", error)
+        return <div>Failed to load this todos</div>
+    }
 
     return (
         <div className="container m-auto p-6 flex flex-col items-center gap-2 h-[calc(100%-4rem)]">
             <AddTodoCard />
             <span className="text-lg font-semibold mt-2">Todo List</span>
-            <ListTodoCard />
+            <ListTodoCard todos={data} />
+            {user && <span className="text-sm text-gray-500 mt-2">Welcome, {user.name}!</span>}
         </div >
     )
 }
