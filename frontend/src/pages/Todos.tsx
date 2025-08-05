@@ -1,17 +1,14 @@
 import { AddTodoCard } from "@/components/addTodoCard"
 import ListTodoCard from "@/components/listTodoCard"
-import axios from "@/api/axios"
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import { useAppSelector } from "@/hooks/reduxHooks";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getTodos, postTodo } from "@/api/myAPI";
+import { useQuery } from "@tanstack/react-query";
+import { getTodos } from "@/api/myAPI";
+import { UpdateTodoModel } from "@/components/updateCardModel";
 
 
 export default function Todos() {
 
     const { user } = useAppSelector((state) => state.auth);
-
 
     // queries
     const { data, error, isLoading, isError } = useQuery({

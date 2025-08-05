@@ -7,19 +7,17 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { addTodo } from "@/features/todos/todosSlice";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react"
-import { useDispatch } from "react-redux";
 
 export function AddTodoCard() {
-    // const dispatch = useDispatch();
+    
     const [todoText, setTodoText] = useState<string>("");
 
     const queryClient = useQueryClient();
 
-    // Mutation 
-    const mutation = useMutation({
+    // Todo Add Mutation 
+    const addMutation = useMutation({
         mutationFn: postTodo,
         onSuccess: () => {
             // Invalidate and refetch
@@ -49,7 +47,7 @@ export function AddTodoCard() {
                         onClick={() => {
                             if (todoText.trim() !== "") {
                                 // dispatch(addTodo({ text: todoText }));
-                                mutation.mutate(todoText)
+                                addMutation.mutate(todoText)
                                 setTodoText("");
                             }
                         }}

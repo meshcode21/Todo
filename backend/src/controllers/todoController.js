@@ -53,16 +53,17 @@ export const deleteTodo = async (req, res) => {
 
 
 // toggle the todo completed....
-export const toggleTodo = async (req, res) => {
-
-  const query = 'UPDATE todos SET completed = NOT completed WHERE id = ? AND user_id = ?';
-  db.query(query, [req.query.id, req.user.id])
+export const updateTodo = async (req, res) => {
+  const { title } = req.body;
+  
+  const query = 'UPDATE todos SET title = ? WHERE id = ? AND user_id = ?';
+  db.query(query, [title, req.query.id, req.user.id])
     .then(result => {
-      if (!result[0].affectedRows) return res.status(400).json({ message: "Unable to toggle due to Unauthorized user." })
+      if (!result[0].affectedRows) return res.status(400).json({ message: "Unable to update due to Unauthorized user." })
       res.json({ id: req.query.id })
     })
     .catch(err => {
       console.log(err)
-      res.status(500).json({ error: 'Failed to toggle todo' })
+      res.status(500).json({ error: 'Failed to update todo' })
     })
 }

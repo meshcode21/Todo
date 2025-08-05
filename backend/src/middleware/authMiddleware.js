@@ -2,7 +2,7 @@ import jwt, { decode } from 'jsonwebtoken'
 import db from '../config/db.js'
 
 export const protect = async (req, res, next) => {
-    console.log("Hello mahesh, i am here:\n",req.headers)
+    // console.log("Hello mahesh, i am here:\n",req.headers)
     let token = req.headers.authorization?.split(' ')[1]
 
     if (!token) return res.status(401).json({ error: 'Not authorized, no token' })
