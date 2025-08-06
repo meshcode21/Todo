@@ -130,12 +130,20 @@ http://localhost:4000
 cd ../frontend
 ```
 
-### 2. Install Dependencies
+### 2. Configure Environment Variables
+Create a .env file inside the ```frontend/``` folder:
+
+```env
+VITE_API_BASE_URL=http://localhost:4000/api
+```
+Adjust values based on your backend endpoint url.
+
+### 3. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Run the Frontend App
+### 4. Run the Frontend App
 ```bash
 npm run dev
 ```
