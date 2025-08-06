@@ -3,7 +3,6 @@ import ListTodoCard from "@/components/listTodoCard"
 import { useAppSelector } from "@/hooks/reduxHooks";
 import { useQuery } from "@tanstack/react-query";
 import { getTodos } from "@/api/myAPI";
-import { UpdateTodoModel } from "@/components/updateCardModel";
 
 
 export default function Todos() {
