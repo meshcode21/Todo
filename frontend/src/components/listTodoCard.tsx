@@ -18,6 +18,7 @@ import { UpdateTodoModel } from "./updateCardModel";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setTodos } from "@/features/todos/todosSlice";
+import { setAddLoading } from "@/features/todos/utilsSlice";
 
 export default function ListTodoCard({ todos }: { todos: Array<any> }) {
 
@@ -38,6 +39,7 @@ export default function ListTodoCard({ todos }: { todos: Array<any> }) {
 
   useEffect(() => {
     dispatch(setTodos(todos))
+    dispatch(setAddLoading(false))
   }, [todos])
 
   const dispatch = useAppDispatch();

@@ -7,12 +7,18 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { setAddLoading } from "@/features/todos/utilsSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react"
+import { LoaderCircle } from "lucide-react";
+import React, { useEffect, useState } from "react"
 
 export function AddTodoCard() {
-    
+
     const [todoText, setTodoText] = useState<string>("");
+
+    const { addLoading } = useAppSelector((state) => state.utils)
+    const dispatch = useAppDispatch();
 
     const queryClient = useQueryClient();
 
@@ -22,8 +28,15 @@ export function AddTodoCard() {
         onSuccess: () => {
             // Invalidate and refetch
             queryClient.invalidateQueries({ queryKey: ['todos'] })
+        },
+        onMutate: () => {
+            dispatch(setAddLoading(true))
         }
     })
+
+    useEffect(() => {
+        // console.log(addMutation)
+    }, [addMutation])
 
     return (
         <Card className="w-full max-w-2xl m-auto border">
@@ -44,6 +57,7 @@ export function AddTodoCard() {
                     />
                     <Button
                         id="add-todo-button"
+                        className="w-25"
                         onClick={() => {
                             if (todoText.trim() !== "") {
                                 // dispatch(addTodo({ text: todoText }));
@@ -52,7 +66,8 @@ export function AddTodoCard() {
                             }
                         }}
                     >
-                        Add Todo
+                        {!addLoading ? "Add Todo" : <LoaderCircle className="animate-spin size-6" />}
+                        {/* Add Todo */}
                     </Button>
                 </div>
             </CardContent>
